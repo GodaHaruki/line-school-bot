@@ -1,118 +1,115 @@
 class KVDB<K, V> { // Key Value db
-  protected sheet: GoogleAppsScript.Spreadsheet.Sheet 
+  protected sheet: GoogleAppsScript.Spreadsheet.Sheet
 
-  constructor(name: string){
+  constructor (name: string) {
     this.sheet = SpreadsheetApp.getActive().getSheetByName(name)
   }
 
-  protected findImpl(key: K): Promise<{key: K, value: V, row: number}>{
-    return new Promise((resolve, reject) => {
-
-    const lastRow = this.sheet.getLastRow()
-    const values = this.sheet.getRange(1, 1, lastRow, 2).getValues()
-    values.forEach((line: [K, V], i: number) => {
-      const lineKey = line[0]
-      const value = line[1]
-      const row = i + 1
-      if(key == lineKey){
-        resolve({key, value, row})
-      }
-    })// .then(_ => reject(`key: ${key} was not found on DB`))
-    // もしPromiseの関係で下のrejectがresolveよりも先に実行されていたら、上のコメントみたいな方法でやれば大丈夫かも
-    // Promiseは一回settledされるとresolveももrejectも効果無くなるらしいから先にresolveされるから問題ないはず
-    reject(`key: ${key} was not found on DB`)
-
+  protected async findImpl (key: K): Promise<{ key: K, value: V, row: number }> {
+    return await new Promise((resolve, reject) => {
+      const lastRow = this.sheet.getLastRow()
+      const values = this.sheet.getRange(1, 1, lastRow, 2).getValues()
+      values.forEach((line: [K, V], i: number) => {
+        const lineKey = line[0]
+        const value = line[1]
+        const row = i + 1
+        if (key == lineKey) {
+          resolve({ key, value, row })
+        }
+      })// .then(_ => reject(`key: ${key} was not found on DB`))
+      // もしPromiseの関係で下のrejectがresolveよりも先に実行されていたら、上のコメントみたいな方法でやれば大丈夫かも
+      // Promiseは一回settledされるとresolveももrejectも効果無くなるらしいから先にresolveされるから問題ないはず
+      reject(`key: ${key} was not found on DB`)
     })
   }
 
-  protected getLineRange(row: number){
+  protected getLineRange (row: number) {
     return this.sheet.getRange(row, 1, 1, 2)
   }
 
-  protected getSetFunc(row: number){
+  protected getSetFunc (row: number) {
     const range = this.getLineRange(row)
-    
+
     const setValue = (key: K, value: V) => {
       range.setValues([[key, value]])
     }
-    return {setValue}
+    return { setValue }
   }
 
-  find(f: (k: K, v: V) => boolean): Promise<[K, V][]>{
-    return new Promise((resolve, reject) => {
-      
+  async find (f: (k: K, v: V) => boolean): Promise<Array<[K, V]>> {
+    return await new Promise((resolve, reject) => {
       this.getAllKV()
         .then(kvs => kvs.filter((kv) => {
           const [k, v] = kv
-          if(f(k, v)){ return true }
+          if (f(k, v)) { return true }
         }))
-        .then(res => resolve(res))
+        .then(res => { resolve(res) })
     })
   }
 
-  findByKey(f: (k: K) => boolean): Promise<V[]>{
-    return new Promise((resolve, reject) => {
+  async findByKey (f: (k: K) => boolean): Promise<V[]> {
+    return await new Promise((resolve, reject) => {
       this.find((k, _) => f(k))
-      .then(kvs => resolve(kvs.map(kv => kv[1])))
+        .then(kvs => { resolve(kvs.map(kv => kv[1])) })
     })
   }
 
-  findByValue(f: (v: V) => boolean): Promise<V[]>{
-    return new Promise((resolve, reject) => {
+  async findByValue (f: (v: V) => boolean): Promise<V[]> {
+    return await new Promise((resolve, reject) => {
       this.find((_, v) => f(v))
-      .then(kvs => resolve(kvs.map(kv => kv[1])))
+        .then(kvs => { resolve(kvs.map(kv => kv[1])) })
     })
   }
 
-  push(key: K, value: V): Promise<void>{
-    return new Promise((resolve, reject) => {
+  async push (key: K, value: V): Promise<void> {
+    await new Promise((resolve, reject) => {
       this.findImpl(key)
-      .then(_ => reject("this key is already used. use put instead"))
-      .catch(_ => {
-        const insertRow = this.sheet.getLastRow() + 1
-        this.getSetFunc(insertRow).setValue(key, value)
-        resolve()
-      })
+        .then(_ => { reject('this key is already used. use put instead') })
+        .catch(_ => {
+          const insertRow = this.sheet.getLastRow() + 1
+          this.getSetFunc(insertRow).setValue(key, value)
+          resolve()
+        })
     })
   }
 
-  put(key: K, value: V): Promise<void>{
-    return new Promise((resolve, reject) => {
+  async put (key: K, value: V): Promise<void> {
+    await new Promise((resolve, reject) => {
       this.findImpl(key)
-      .then(({row}) => {
-        const insertRow = row
-        this.getSetFunc(insertRow).setValue(key, value)
-        resolve()
-      })
-      .catch(_ => {
-        const insertRow = this.sheet.getLastRow() + 1
-        this.getSetFunc(insertRow).setValue(key, value)
-        resolve()
-      })
+        .then(({ row }) => {
+          const insertRow = row
+          this.getSetFunc(insertRow).setValue(key, value)
+          resolve()
+        })
+        .catch(_ => {
+          const insertRow = this.sheet.getLastRow() + 1
+          this.getSetFunc(insertRow).setValue(key, value)
+          resolve()
+        })
     })
   }
 
-  async get(key: K): Promise<V>{
+  async get (key: K): Promise<V> {
     const { value } = await this.findImpl(key)
 
     return value
   }
 
-  gets(keys: K[]): Promise<V[]>{
+  async gets (keys: K[]): Promise<V[]> {
     const resPromise = keys.map(async (k) => {
       const { value } = await this.findImpl(k)
 
       return value
     })
 
-    return Promise.all(resPromise)
+    return await Promise.all(resPromise)
   }
 
-  getAll(): Promise<V[]>{
-    return new Promise((resolve, reject) => {
+  async getAll (): Promise<V[]> {
+    return await new Promise((resolve, reject) => {
       const lastRow = this.sheet.getLastRow()
 
-      const values: [K, V][] = this.sheet.getRange(1, 1, lastRow, 2).getValues() as [K, V][]
+      const values: Array<[K, V]> = this.sheet.getRange(1, 1, lastRow, 2).getValues() as Array<[K, V]>
 
       const res = values.map(v => v[1])
 
@@ -120,22 +117,22 @@ class KVDB<K, V> { // Key Value db
     })
   }
 
-  getAllKV(): Promise<[K,V][]>{
-    return new Promise((resolve, reject) => {
+  async getAllKV (): Promise<Array<[K, V]>> {
+    return await new Promise((resolve, reject) => {
       const lastRow = this.sheet.getLastRow()
 
-      const values: [K, V][] = this.sheet.getRange(1, 1, lastRow, 2).getValues() as [K, V][]
+      const values: Array<[K, V]> = this.sheet.getRange(1, 1, lastRow, 2).getValues() as Array<[K, V]>
 
       resolve(values)
-    }) 
+    })
   }
 
-  delete(key: K): Promise<void> {
-    return new Promise((resolve, reject) => {
+  async delete (key: K): Promise<void> {
+    await new Promise((resolve, reject) => {
       this.findImpl(key)
-      .then(({row}) => this.getLineRange(row).deleteCells(SpreadsheetApp.Dimension.ROWS))
-      .then(_ => resolve())
-      .catch(_ => resolve())
+        .then(({ row }) => { this.getLineRange(row).deleteCells(SpreadsheetApp.Dimension.ROWS) })
+        .then(_ => { resolve() })
+        .catch(_ => { resolve() })
     })
   }
 }

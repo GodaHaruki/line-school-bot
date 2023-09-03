@@ -1,5 +1,5 @@
-import { JoinEvent } from "@line/bot-sdk";
+import { type JoinEvent } from '@line/bot-sdk'
 
-function handleJoinEvent(evt: JoinEvent){}
+function handleJoinEvent (evt: JoinEvent) {}
 
-export default handleJoinEvent;
+export default handleJoinEvent

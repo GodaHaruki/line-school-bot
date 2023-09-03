@@ -1,29 +1,29 @@
-import { JoinEvent, Message, MessageEvent, WebhookEvent, WebhookRequestBody } from "@line/bot-sdk"
-import { handleMessageEvent, handleJoinEvent } from "./event/handleEvent"
+import { type JoinEvent, Message, type MessageEvent, WebhookEvent, type WebhookRequestBody } from '@line/bot-sdk'
+import { handleMessageEvent, handleJoinEvent } from './event/handleEvent'
 
-function handleDoPost(evt: GoogleAppsScript.Events.DoPost){
+function handleDoPost (evt: GoogleAppsScript.Events.DoPost) {
   const body: WebhookRequestBody = JSON.parse(evt.postData.contents) as WebhookRequestBody
 
   body.events.forEach(webhookEvt => {
-    switch(webhookEvt.type){
-      case "message":
+    switch (webhookEvt.type) {
+      case 'message':
         handleMessageEvent(webhookEvt as MessageEvent)
         break
-  
-      case "join":
+
+      case 'join':
         handleJoinEvent(webhookEvt as JoinEvent)
         break
-  
-      case "follow":
+
+      case 'follow':
         break
-  
-      case "memberJoined":
+
+      case 'memberJoined':
         break
-      
-      case "memberLeft":
+
+      case 'memberLeft':
         break
     }
   })
 }
 
-export default handleDoPost;
+export default handleDoPost

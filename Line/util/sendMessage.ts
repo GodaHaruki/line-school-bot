@@ -1,8 +1,8 @@
-import { Message } from "@line/bot-sdk";
-import { MESSAGING_API_PREFIX } from "@line/bot-sdk/dist/endpoints";
-import getScriptEnv from "../../env";
+import { type Message } from '@line/bot-sdk'
+import { MESSAGING_API_PREFIX } from '@line/bot-sdk/dist/endpoints'
+import getScriptEnv from '../../env'
 
-type Messages = Message|[Message]|[Message, Message]|[Message, Message, Message]
+type Messages = Message | [Message] | [Message, Message] | [Message, Message, Message]
 
 // curl -v -X POST https://api.line.me/v2/bot/message/reply \
 // -H 'Content-Type: application/json' \
@@ -21,21 +21,22 @@ type Messages = Message|[Message]|[Message, Message]|[Message, Message, Message]
 //     ]
 // }'
 
-function sendMessageWithReplyApi(msgs: Messages, replyToken: string){
-  const url = MESSAGING_API_PREFIX + "/message/push"
+function sendMessageWithReplyApi (msgs: Messages, replyToken: string) {
+  const url = MESSAGING_API_PREFIX + '/message/push'
 
-  const msg = Array.isArray(msgs) ?
-    msgs : [msgs]
+  const msg = Array.isArray(msgs)
+    ? msgs
+    : [msgs]
 
   return UrlFetchApp.fetch(url, {
-    "contentType": "application/json",
-    "headers": {
-      "Authorization": `Bearer ${getScriptEnv().LINE_CHANNEL_ACCESS_TOKEN}`
+    contentType: 'application/json',
+    headers: {
+      Authorization: `Bearer ${getScriptEnv().LINE_CHANNEL_ACCESS_TOKEN}`
     },
-    "method": "post",
-    "payload": {
-      "replyToken": replyToken,
-      "messages": msg
+    method: 'post',
+    payload: {
+      replyToken,
+      messages: msg
     }
   })
 }
@@ -58,34 +59,34 @@ function sendMessageWithReplyApi(msgs: Messages, replyToken: string){
 //     ]
 // }'
 
-function sendMessageWithPushApi(msgs: Messages, to: string){
-  const url = MESSAGING_API_PREFIX + "/message/push"
+function sendMessageWithPushApi (msgs: Messages, to: string) {
+  const url = MESSAGING_API_PREFIX + '/message/push'
 
-  const msg = Array.isArray(msgs) ?
-    msgs : [msgs] // if msgs == Message, convert to [Message]
-
+  const msg = Array.isArray(msgs)
+    ? msgs
+    : [msgs] // if msgs == Message, convert to [Message]
 
   return UrlFetchApp.fetch(url, {
-    "contentType": "application/json",
-    "headers": {
-      "Authorization": `Bearer ${getScriptEnv().LINE_CHANNEL_ACCESS_TOKEN}`
+    contentType: 'application/json',
+    headers: {
+      Authorization: `Bearer ${getScriptEnv().LINE_CHANNEL_ACCESS_TOKEN}`
     },
-    "method": "post",
-    "payload": {
-      "to": to,
-      "messages": msg
+    method: 'post',
+    payload: {
+      to,
+      messages: msg
     }
   })
 }
 
-async function sendMessage(msgs: Messages, to?: string, replyToken?: string){
-  if(replyToken){
+async function sendMessage (msgs: Messages, to?: string, replyToken?: string) {
+  if (replyToken) {
     return sendMessageWithReplyApi(msgs, replyToken)
-  } else if(to) {
+  } else if (to) {
     return sendMessageWithPushApi(msgs, to)
   } else { // to = null, replyToken = null
-    throw TypeError("set value either to or replyToken")
+    throw TypeError('set value either to or replyToken')
   }
 }
 
-export default sendMessage;
+export default sendMessage

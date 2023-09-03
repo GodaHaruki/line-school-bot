@@ -1,9 +1,9 @@
-import handleDoPost from "./doPost";
+import handleDoPost from './doPost'
 
-function doGet(e: GoogleAppsScript.Events.DoGet){
-  
+function doGet (e: GoogleAppsScript.Events.DoGet) {
+
 }
 
-function doPost(e: GoogleAppsScript.Events.DoPost){
+function doPost (e: GoogleAppsScript.Events.DoPost) {
   handleDoPost(e)
 }
