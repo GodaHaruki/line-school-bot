@@ -56,7 +56,7 @@ class UnUsedReplyTokenDB {
   }
 
   async deleteExpiredToken (nowTimeMilliseconds: number): Promise<void> {
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       const deletePromise: Array<Promise<void>> = []
 
       this.db.getAllKV().then(kvs => {

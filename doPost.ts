@@ -1,4 +1,4 @@
-import { type JoinEvent, Message, type MessageEvent, WebhookEvent, type WebhookRequestBody } from '@line/bot-sdk'
+import { type JoinEvent, type MessageEvent, type WebhookRequestBody } from '@line/bot-sdk'
 import { handleMessageEvent, handleJoinEvent } from './event/handleEvent'
 
 function handleDoPost (evt: GoogleAppsScript.Events.DoPost) {

@@ -3,7 +3,7 @@ import MessageDB from '../../DB/util/messageDB'
 import sendMessage from '../../Line/util/sendMessage'
 
 async function handleMessageEvent (evt: MessageEvent) {
-  const db = evt.source.type == 'user'
+  const db = evt.source.type === 'user'
     ? new MessageDB(evt.source.userId)
     : new MessageDB((evt.source as Group).groupId)
 
@@ -21,29 +21,29 @@ async function handleMessageEvent (evt: MessageEvent) {
         .then(res => Logger.log(res.getResponseCode()))
       break
 
-    case 'image':
-      const image = evt.message as ImageEventMessage
-      break
+    // case 'image':
+    //   const image = evt.message as ImageEventMessage
+    //   break
 
-    case 'video':
-      const video = evt.message as VideoEventMessage
-      break
+    // case 'video':
+    //   const video = evt.message as VideoEventMessage
+    //   break
 
-    case 'audio':
-      const audio = evt.message as AudioEventMessage
-      break
+    // case 'audio':
+    //   const audio = evt.message as AudioEventMessage
+    //   break
 
-    case 'location':
-      const location = evt.message as LocationEventMessage
-      break
+    // case 'location':
+    //   const location = evt.message as LocationEventMessage
+    //   break
 
-    case 'file':
-      const file = evt.message as FileEventMessage
-      break
+    // case 'file':
+    //   const file = evt.message as FileEventMessage
+    //   break
 
-    case 'sticker':
-      const sticker = evt.message as StickerEventMessage
-      break
+    // case 'sticker':
+    //   const sticker = evt.message as StickerEventMessage
+    //   break
   }
 }
 

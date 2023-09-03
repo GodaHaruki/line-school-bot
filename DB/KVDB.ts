@@ -2,13 +2,15 @@ class KVDB<K, V> { // Key Value db
   protected sheet: GoogleAppsScript.Spreadsheet.Sheet
 
   constructor (name: string) {
-    this.sheet = SpreadsheetApp.getActive().getSheetByName(name)
+    const sheet = SpreadsheetApp.getActive().getSheetByName(name)
+    if (!sheet) { throw Error(`there is no sheet named ${name}`) }
+    this.sheet = sheet
   }
 
   protected async findImpl (key: K): Promise<{ key: K, value: V, row: number }> {
     return await new Promise((resolve, reject) => {
       const lastRow = this.sheet.getLastRow()
-      const values = this.sheet.getRange(1, 1, lastRow, 2).getValues()
+      const values: Array<[K, V]> = this.sheet.getRange(1, 1, lastRow, 2).getValues() as Array<[K, V]>
       values.forEach((line: [K, V], i: number) => {
         const lineKey = line[0]
         const value = line[1]
@@ -62,7 +64,7 @@ class KVDB<K, V> { // Key Value db
   }
 
   async push (key: K, value: V): Promise<void> {
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       this.findImpl(key)
         .then(_ => { reject('this key is already used. use put instead') })
         .catch(_ => {
@@ -74,7 +76,7 @@ class KVDB<K, V> { // Key Value db
   }
 
   async put (key: K, value: V): Promise<void> {
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       this.findImpl(key)
         .then(({ row }) => {
           const insertRow = row
@@ -128,7 +130,7 @@ class KVDB<K, V> { // Key Value db
   }
 
   async delete (key: K): Promise<void> {
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       this.findImpl(key)
         .then(({ row }) => { this.getLineRange(row).deleteCells(SpreadsheetApp.Dimension.ROWS) })
         .then(_ => { resolve() })
