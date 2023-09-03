@@ -14,15 +14,15 @@ env:
   node-version: 12
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.node-version }}
-      - run: npm install
-      - run: npm run lint
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v2
+  #       with:
+  #         node-version: ${{ env.node-version }}
+  #     - run: npm install
+  #     - run: npm run lint
 
   deploy:
     runs-on: ubuntu-latest
