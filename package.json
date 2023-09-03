@@ -1,7 +1,6 @@
 {
   "name": "typescript",
   "version": "0.0.0",
-  "private": true,
   "dependencies": {
     "@line/bot-sdk": "^7.5.2",
     "@types/google-apps-script": "^1.0.67"
