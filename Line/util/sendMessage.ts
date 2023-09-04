@@ -21,7 +21,7 @@ type Messages = Message | [Message] | [Message, Message] | [Message, Message, Me
 //     ]
 // }'
 
-function sendMessageWithReplyApi (msgs: Messages, replyToken: string) {
+export async function sendMessageWithReplyApi (msgs: Messages, replyToken: string) {
   const url = 'https://api.line.me/v2/bot/message/reply'
 
   const msg = Array.isArray(msgs)
@@ -59,7 +59,7 @@ function sendMessageWithReplyApi (msgs: Messages, replyToken: string) {
 //     ]
 // }'
 
-function sendMessageWithPushApi (msgs: Messages, to: string) {
+export async function sendMessageWithPushApi (msgs: Messages, to: string) {
   const url = 'https://api.line.me/v2/bot/message/push'
 
   const msg = Array.isArray(msgs)
@@ -78,15 +78,3 @@ function sendMessageWithPushApi (msgs: Messages, to: string) {
     })
   })
 }
-
-async function sendMessage (msgs: Messages, to?: string, replyToken?: string) {
-  if (replyToken) {
-    return sendMessageWithReplyApi(msgs, replyToken)
-  } else if (to) {
-    return sendMessageWithPushApi(msgs, to)
-  } else { // to = null, replyToken = null
-    throw TypeError('set value either to or replyToken')
-  }
-}
-
-export default sendMessage
