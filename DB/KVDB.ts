@@ -17,10 +17,10 @@ class KVDB<K, V> { // Key Value db
   protected async findImpl (key: K): Promise<{ key: K, value: V, row: number }> {
     return await new Promise((resolve, reject) => {
       const lastRow = this.sheet.getLastRow()
-      const values: Array<[K, V]> = this.sheet.getRange(1, 1, lastRow, 2).getValues() as Array<[K, V]>
-      values.forEach((line: [K, V], i: number) => {
+      const values: Array<[K, string]> = this.sheet.getRange(1, 1, lastRow, 2).getValues() as Array<[K, string]>
+      values.forEach((line: [K, string], i: number) => {
         const lineKey = line[0]
-        const value = line[1]
+        const value = JSON.stringify(line[1]) as V
         const row = i + 1
         if (key == lineKey) {
           resolve({ key, value, row })
@@ -39,7 +39,7 @@ class KVDB<K, V> { // Key Value db
   protected getSetFunc (row: number) {
     const range = this.getLineRange(row)
 
-    const setValue = (key: K, value: V) => {
+    const setValue = (key: K, value: string) => {
       range.setValues([[key, value]])
     }
     return { setValue }
@@ -76,7 +76,7 @@ class KVDB<K, V> { // Key Value db
         .then(_ => { reject('this key is already used. use put instead') })
         .catch(_ => {
           const insertRow = this.sheet.getLastRow() + 1
-          this.getSetFunc(insertRow).setValue(key, value)
+          this.getSetFunc(insertRow).setValue(key, JSON.stringify(value))
           resolve()
         })
     })
@@ -87,12 +87,12 @@ class KVDB<K, V> { // Key Value db
       this.findImpl(key)
         .then(({ row }) => {
           const insertRow = row
-          this.getSetFunc(insertRow).setValue(key, value)
+          this.getSetFunc(insertRow).setValue(key, JSON.stringify(value))
           resolve()
         })
         .catch(_ => {
           const insertRow = this.sheet.getLastRow() + 1
-          this.getSetFunc(insertRow).setValue(key, value)
+          this.getSetFunc(insertRow).setValue(key, JSON.stringify(value))
           resolve()
         })
     })
@@ -118,9 +118,9 @@ class KVDB<K, V> { // Key Value db
     return await new Promise((resolve, reject) => {
       const lastRow = this.sheet.getLastRow()
 
-      const values: Array<[K, V]> = this.sheet.getRange(1, 1, lastRow, 2).getValues() as Array<[K, V]>
+      const values: Array<[K, string]> = this.sheet.getRange(1, 1, lastRow, 2).getValues() as Array<[K, string]>
 
-      const res = values.map(v => v[1])
+      const res = values.map(v => JSON.stringify(v[1]) as V)
 
       resolve(res)
     })
@@ -130,9 +130,9 @@ class KVDB<K, V> { // Key Value db
     return await new Promise((resolve, reject) => {
       const lastRow = this.sheet.getLastRow()
 
-      const values: Array<[K, V]> = this.sheet.getRange(1, 1, lastRow, 2).getValues() as Array<[K, V]>
+      const values: Array<[K, string]> = this.sheet.getRange(1, 1, lastRow, 2).getValues() as Array<[K, string]>
 
-      resolve(values)
+      resolve(values.map(v => [v[0], JSON.stringify(v[1]) as V]))
     })
   }
 
