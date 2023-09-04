@@ -142,11 +142,11 @@ export class KVDB<K, V> { // Key Value db
   }
 }
 
-// declare let global: any // esbuild won't include class implementation so add to global
+declare let global: any // esbuild won't include class implementation so add to global
 
-// global.KVDB = KVDB
-// global.MessageDB = MessageDB
-// global.UnUsedReplyTokenDB = UnUsedReplyTokenDB
+global.KVDB = KVDB
+global.MessageDB = MessageDB
+global.UnUsedReplyTokenDB = UnUsedReplyTokenDB
 
 export {
   KVDB,
