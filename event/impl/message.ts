@@ -1,6 +1,7 @@
 import { type AudioEventMessage, type FileEventMessage, type Group, type ImageEventMessage, type LocationEventMessage, type MessageEvent, type StickerEventMessage, type TextEventMessage, type TextMessage, type VideoEventMessage } from '@line/bot-sdk'
 import MessageDB from '../../DB/util/messageDB'
 import sendMessage from '../../Line/util/sendMessage'
+import { KVDB } from '../../DB/KVDB'
 
 async function handleMessageEvent (evt: MessageEvent) {
   const db = evt.source.type === 'user'
@@ -16,6 +17,9 @@ async function handleMessageEvent (evt: MessageEvent) {
         type: 'text',
         text: text.text
       }
+
+      Logger.log("send message")
+      new KVDB("Sheet1").push("msg","send message")
 
       sendMessage([msg], evt.replyToken)
         .then(res => Logger.log(res.getResponseCode()))
