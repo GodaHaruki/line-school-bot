@@ -1,6 +1,8 @@
-const { GasPlugin } = require('esbuild-gas-plugin');
+import { GasPlugin } from "esbuild-gas-plugin"
+import * as esbuild from "esbuild"
 
-require('esbuild').build({
+
+esbuild.build({
   entryPoints: ['src/app.ts'],
   bundle: true,
   outfile: 'public/app.js',
