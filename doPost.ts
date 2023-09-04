@@ -8,6 +8,9 @@ function handleDoPost (evt: GoogleAppsScript.Events.DoPost) {
     switch (webhookEvt.type) {
       case 'message':
         handleMessageEvent(webhookEvt as MessageEvent)
+        .catch(e => {
+          throw Error(e)
+        })
         break
 
       case 'join':
