@@ -34,7 +34,7 @@ jobs:
       - name: install esbuild
         run: npm i -D esbuild
       - name: bundle file
-        run: npx vite esbuild ./index.ts --bundle --outfile=./dist/index.js
+        run: npx esbuild ./index.ts --bundle --outfile=./dist/index.js
       - run: sudo npm i -g @google/clasp
       - name: Setup clasp config
         run: |
