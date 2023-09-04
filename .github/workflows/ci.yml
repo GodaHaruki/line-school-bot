@@ -43,6 +43,8 @@ jobs:
 
       - name: install package
         run: npm i
+      - name: install esbuild
+        run: npm i -D esbuild esbuild-gas-plugin
       - name: build
         run: npm run build
       - run: sudo npm i -g @google/clasp
