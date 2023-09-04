@@ -22,7 +22,7 @@ type Messages = Message | [Message] | [Message, Message] | [Message, Message, Me
 // }'
 
 function sendMessageWithReplyApi (msgs: Messages, replyToken: string) {
-  const url = MESSAGING_API_PREFIX + '/message/reply'
+  const url = 'https://api.line.me/v2/bot/message/reply'
 
   const msg = Array.isArray(msgs)
     ? msgs
@@ -60,7 +60,7 @@ function sendMessageWithReplyApi (msgs: Messages, replyToken: string) {
 // }'
 
 function sendMessageWithPushApi (msgs: Messages, to: string) {
-  const url = MESSAGING_API_PREFIX + '/message/push'
+  const url = 'https://api.line.me/v2/bot/message/push'
 
   const msg = Array.isArray(msgs)
     ? msgs
