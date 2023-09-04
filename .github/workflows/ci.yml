@@ -39,7 +39,7 @@ jobs:
       - name: Setup clasp config
         run: |
           echo -n '${{ secrets.CLASPRC }}' > ~/.clasprc.json
-          echo -n '${{ secrets.CLASP }}' > .clasp.json
+          echo '${{ secrets.CLASP }}' > .clasp.json
       - name: Push
         run: clasp push
       - name: Deploy
