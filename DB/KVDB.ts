@@ -6,8 +6,12 @@ class KVDB<K, V> { // Key Value db
 
   constructor (name: string) {
     const sheet = SpreadsheetApp.getActive().getSheetByName(name)
-    if (!sheet) { throw Error(`there is no sheet named ${name}`) }
-    this.sheet = sheet
+    if (!sheet) { 
+      Logger.log(`There is no sheet named ${name}\nso make new sheet`)
+      this.sheet = SpreadsheetApp.getActive().insertSheet(name) 
+    } else {
+      this.sheet = sheet
+    }
   }
 
   protected async findImpl (key: K): Promise<{ key: K, value: V, row: number }> {
