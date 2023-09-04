@@ -1,3 +1,5 @@
+import { KVDB } from '../KVDB'
+
 interface ReplyTokenInfo {
   replyToken: string
   timestamp: number
