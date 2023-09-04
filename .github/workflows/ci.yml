@@ -31,10 +31,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.node-version }}
-      - name: install vite
-      - run: npm i vite
-      - name: bundle file
-      - run: npx vite build
       - run: sudo npm i -g @google/clasp
       - name: Setup clasp config
         run: |
