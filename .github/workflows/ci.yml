@@ -36,10 +36,15 @@ jobs:
       # - name: bundle file
       #   run: npx esbuild ./index.ts --bundle --outfile=./dist/index.js
 
-      - name: install parcel
-        run: npm i -D parcel
-      - name: bundle file with parcel
-        run: npx parcel
+      # - name: install parcel
+      #   run: npm i -D parcel
+      # - name: bundle file with parcel
+      #   run: npx parcel
+
+      - name: install package
+        run: npm i
+      - name: build
+        run: npm run build
       - run: sudo npm i -g @google/clasp
       - name: Setup clasp config
         run: |
