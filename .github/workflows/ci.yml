@@ -44,3 +44,5 @@ jobs:
         run: clasp push
       - name: Deploy
         run: clasp deploy -i AKfycbwU7yERsBFBhlQjX9axfx3uXzq-DDocw2XPW8c9j2TF53DAQjTM2gSctUWBpAvOytV5
+      - name: check deployments
+        run: clasp deployments
