@@ -78,3 +78,5 @@ class UnUsedReplyTokenDB {
     })
   }
 }
+
+export default UnUsedReplyTokenDB;

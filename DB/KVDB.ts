@@ -1,4 +1,7 @@
-class KVDB<K, V> { // Key Value db
+import MessageDB from "../DB/util/messageDB"
+import UnUsedReplyTokenDB from "../DB/util/unUsedReplyTokenDB"
+
+export class KVDB<K, V> { // Key Value db
   protected sheet: GoogleAppsScript.Spreadsheet.Sheet
 
   constructor (name: string) {
@@ -137,4 +140,16 @@ class KVDB<K, V> { // Key Value db
         .catch(_ => { resolve() })
     })
   }
+}
+
+// declare let global: any // esbuild won't include class implementation so add to global
+
+// global.KVDB = KVDB
+// global.MessageDB = MessageDB
+// global.UnUsedReplyTokenDB = UnUsedReplyTokenDB
+
+export {
+  KVDB,
+  MessageDB,
+  UnUsedReplyTokenDB
 }

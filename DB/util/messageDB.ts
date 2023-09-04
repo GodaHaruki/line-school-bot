@@ -6,4 +6,4 @@ class MessageDB extends KVDB<string, MessageEvent> {
   }
 }
 
-export default MessageDB
+export default MessageDB;
