@@ -31,10 +31,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.node-version }}
-      - name: install percel
-        run: npm i -D percel
+      - name: install parcel
+        run: npm i -D parcel
       - name: bundle file
-        run: npx vite percel build ./index.ts
+        run: npx vite parcel build ./index.ts
       - run: sudo npm i -g @google/clasp
       - name: Setup clasp config
         run: |
