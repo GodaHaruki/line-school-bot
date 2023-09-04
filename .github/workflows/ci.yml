@@ -42,3 +42,5 @@ jobs:
           echo -n '${{ secrets.CLASP }}' > .clasp.json
       - name: push
         run: clasp push
+      - name: Deploy
+        run: clasp deploy
