@@ -1,6 +1,6 @@
 import { type AudioEventMessage, type FileEventMessage, type Group, type ImageEventMessage, type LocationEventMessage, type MessageEvent, type StickerEventMessage, type TextEventMessage, type TextMessage, type VideoEventMessage } from '@line/bot-sdk'
 import MessageDB from '../../DB/util/messageDB'
-import sendMessage from '../../Line/util/sendMessage'
+import { sendMessageWithReplyApi } from '../../Line/util/sendMessage'
 import { KVDB } from '../../DB/KVDB'
 
 async function handleMessageEvent (evt: MessageEvent) {
@@ -21,7 +21,7 @@ async function handleMessageEvent (evt: MessageEvent) {
       Logger.log("send message")
       // throw Error
 
-      sendMessage([msg], evt.replyToken).then(v => {throw Error(v.getResponseCode().toString())})
+      sendMessageWithReplyApi([msg], evt.replyToken).then(v => {throw Error(v.getResponseCode().toString())})
       break
 
     // case 'image':
