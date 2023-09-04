@@ -3,8 +3,8 @@ import * as esbuild from "esbuild"
 
 
 esbuild.build({
-  entryPoints: ['src/app.ts'],
+  entryPoints: ['index.ts'],
   bundle: true,
-  outfile: 'public/app.js',
+  outfile: 'dist/index.js',
   plugins: [GasPlugin]
 }).catch(() => process.exit(1))
