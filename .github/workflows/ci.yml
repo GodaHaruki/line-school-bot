@@ -34,7 +34,7 @@ jobs:
       - name: install percel
         run: npm i -D percel
       - name: bundle file
-        run: npx vite percel ./index.ts
+        run: npx vite percel build ./index.ts
       - run: sudo npm i -g @google/clasp
       - name: Setup clasp config
         run: |
