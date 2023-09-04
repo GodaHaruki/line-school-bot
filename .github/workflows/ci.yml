@@ -42,6 +42,8 @@ jobs:
           echo -n '${{ secrets.CLASP }}' > .clasp.json
       - name: Push
         run: clasp push
+      - name: Version
+        run: clasp version
       - name: Deploy
         run: clasp deploy -i AKfycbwU7yERsBFBhlQjX9axfx3uXzq-DDocw2XPW8c9j2TF53DAQjTM2gSctUWBpAvOytV5
       - name: check deployments
