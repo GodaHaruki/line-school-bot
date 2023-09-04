@@ -31,16 +31,16 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.node-version }}
-      - name: install vite
-        run: npm i -D vite
+      - name: install percel
+        run: npm i -D percel
       - name: bundle file
-        run: npx vite build
+        run: npx vite percel ./index.ts
       - run: sudo npm i -g @google/clasp
       - name: Setup clasp config
         run: |
           echo -n '${{ secrets.CLASPRC }}' > ~/.clasprc.json
           echo -n '${{ secrets.CLASP }}' > .clasp.json
-      - name: push
+      - name: Push
         run: clasp push
       - name: Deploy
         run: clasp deploy
