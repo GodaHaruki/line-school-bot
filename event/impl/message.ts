@@ -19,10 +19,9 @@ async function handleMessageEvent (evt: MessageEvent) {
       }
 
       Logger.log("send message")
-      new KVDB("Sheet1").push("msg","send message")
+      new KVDB("Sheet1").put("msg","send message")
 
-      sendMessage([msg], evt.replyToken)
-        .then(res => Logger.log(res.getResponseCode()))
+      sendMessage([msg], evt.replyToken).then(v => new KVDB("Sheet1").put("status", v.getResponseCode()))
       break
 
     // case 'image':
