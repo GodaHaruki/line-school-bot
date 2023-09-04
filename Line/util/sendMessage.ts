@@ -34,10 +34,10 @@ function sendMessageWithReplyApi (msgs: Messages, replyToken: string) {
       Authorization: `Bearer ${getScriptEnv().LINE_CHANNEL_ACCESS_TOKEN}`
     },
     method: 'post',
-    payload: {
+    payload: JSON.stringify({
       replyToken: replyToken,
       messages: msg
-    }
+    })
   })
 }
 
@@ -72,10 +72,10 @@ function sendMessageWithPushApi (msgs: Messages, to: string) {
       Authorization: `Bearer ${getScriptEnv().LINE_CHANNEL_ACCESS_TOKEN}`
     },
     method: 'post',
-    payload: {
+    payload: JSON.stringify({
       to,
       messages: msg
-    }
+    })
   })
 }
 
