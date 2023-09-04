@@ -41,9 +41,7 @@ jobs:
           echo -n '${{ secrets.CLASPRC }}' > ~/.clasprc.json
           echo -n '${{ secrets.CLASP }}' > .clasp.json
       - name: Push
-        run: |
-          clasp push
-          echo "y"
+        run: echo 'yes' | clasp push
       # - name: Version
         # run: clasp version
       - name: Deploy
