@@ -22,7 +22,7 @@ type Messages = Message | [Message] | [Message, Message] | [Message, Message, Me
 // }'
 
 function sendMessageWithReplyApi (msgs: Messages, replyToken: string) {
-  const url = MESSAGING_API_PREFIX + '/message/push'
+  const url = MESSAGING_API_PREFIX + '/message/reply'
 
   const msg = Array.isArray(msgs)
     ? msgs
@@ -35,7 +35,7 @@ function sendMessageWithReplyApi (msgs: Messages, replyToken: string) {
     },
     method: 'post',
     payload: {
-      replyToken,
+      replyToken: replyToken,
       messages: msg
     }
   })
