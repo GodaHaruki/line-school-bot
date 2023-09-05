@@ -1,7 +1,7 @@
 import MessageDB from "../DB/util/messageDB"
 import UnUsedReplyTokenDB from "../DB/util/unUsedReplyTokenDB"
 
-class KVDB<K, V> { // Key Value db
+class KVDB<K extends string | number, V> { // Key Value db
   protected sheet: GoogleAppsScript.Spreadsheet.Sheet
 
   constructor (name: string) {
