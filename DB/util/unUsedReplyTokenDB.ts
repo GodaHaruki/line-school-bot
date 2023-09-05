@@ -1,4 +1,4 @@
-import { KVDB } from '../KVDB'
+import KVDB from '../KVDB'
 
 interface ReplyTokenInfo {
   replyToken: string

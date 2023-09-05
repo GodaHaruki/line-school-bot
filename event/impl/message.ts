@@ -1,12 +1,23 @@
-import { type AudioEventMessage, type FileEventMessage, type Group, type ImageEventMessage, type LocationEventMessage, type MessageEvent, type StickerEventMessage, type TextEventMessage, type TextMessage, type VideoEventMessage } from '@line/bot-sdk'
+import {
+  type AudioEventMessage,
+  type FileEventMessage,
+  type Group,
+  type ImageEventMessage,
+  type LocationEventMessage,
+  type MessageEvent,
+  type StickerEventMessage,
+  type TextEventMessage,
+  type TextMessage,
+  type VideoEventMessage
+} from '@line/bot-sdk'
 import MessageDB from '../../DB/util/messageDB'
 import { sendMessageWithReplyApi } from '../../Line/util/sendMessage'
-import { KVDB } from '../../DB/KVDB'
 
 async function handleMessageEvent (evt: MessageEvent) {
-  const db = evt.source.type === 'user'
-    ? new MessageDB(evt.source.userId)
-    : new MessageDB((evt.source as Group).groupId)
+  const db =
+    evt.source.type === 'user'
+      ? new MessageDB(evt.source.userId)
+      : new MessageDB((evt.source as Group).groupId)
 
   db.push(evt.timestamp.toString(), evt)
 
@@ -21,7 +32,9 @@ async function handleMessageEvent (evt: MessageEvent) {
       Logger.log('send message')
       // throw Error
 
-      sendMessageWithReplyApi([msg], evt.replyToken).then(v => { throw Error(v.getResponseCode().toString()) })
+      sendMessageWithReplyApi([msg], evt.replyToken).then((v) => {
+        throw Error(v.getResponseCode().toString())
+      })
       break
 
     // case 'image':

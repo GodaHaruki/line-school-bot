@@ -1,6 +1,3 @@
-import MessageDB from '../DB/util/messageDB'
-import UnUsedReplyTokenDB from '../DB/util/unUsedReplyTokenDB'
-
 class KVDB<K extends string | number, V> {
   // Key Value db
   protected sheet: GoogleAppsScript.Spreadsheet.Sheet
@@ -175,4 +172,4 @@ class KVDB<K extends string | number, V> {
 // global.MessageDB = MessageDB
 // global.UnUsedReplyTokenDB = UnUsedReplyTokenDB
 
-export { KVDB, MessageDB, UnUsedReplyTokenDB }
+export default KVDB
