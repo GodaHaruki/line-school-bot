@@ -1,5 +1,5 @@
 import { type JoinEvent } from '@line/bot-sdk'
 
-function handleJoinEvent (evt: JoinEvent) {}
+async function handleJoinEvent (evt: JoinEvent): Promise<void> {}
 
 export default handleJoinEvent

@@ -1,8 +1,11 @@
 import { type Message } from '@line/bot-sdk'
-import { MESSAGING_API_PREFIX } from '@line/bot-sdk/dist/endpoints'
 import getScriptEnv from '../../env'
 
-type Messages = Message | [Message] | [Message, Message] | [Message, Message, Message]
+type Messages =
+  | Message
+  | [Message]
+  | [Message, Message]
+  | [Message, Message, Message]
 
 // curl -v -X POST https://api.line.me/v2/bot/message/reply \
 // -H 'Content-Type: application/json' \
@@ -21,12 +24,13 @@ type Messages = Message | [Message] | [Message, Message] | [Message, Message, Me
 //     ]
 // }'
 
-export async function sendMessageWithReplyApi (msgs: Messages, replyToken: string) {
+export async function sendMessageWithReplyApi (
+  msgs: Messages,
+  replyToken: string
+): Promise<GoogleAppsScript.URL_Fetch.HTTPResponse> {
   const url = 'https://api.line.me/v2/bot/message/reply'
 
-  const msg = Array.isArray(msgs)
-    ? msgs
-    : [msgs]
+  const msg = Array.isArray(msgs) ? msgs : [msgs]
 
   return UrlFetchApp.fetch(url, {
     contentType: 'application/json',
@@ -59,12 +63,13 @@ export async function sendMessageWithReplyApi (msgs: Messages, replyToken: strin
 //     ]
 // }'
 
-export async function sendMessageWithPushApi (msgs: Messages, to: string) {
+export async function sendMessageWithPushApi (
+  msgs: Messages,
+  to: string
+): Promise<GoogleAppsScript.URL_Fetch.HTTPResponse> {
   const url = 'https://api.line.me/v2/bot/message/push'
 
-  const msg = Array.isArray(msgs)
-    ? msgs
-    : [msgs] // if msgs == Message, convert to [Message]
+  const msg = Array.isArray(msgs) ? msgs : [msgs] // if msgs == Message, convert to [Message]
 
   return UrlFetchApp.fetch(url, {
     contentType: 'application/json',

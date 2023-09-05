@@ -1,19 +1,8 @@
-import {
-  type AudioEventMessage,
-  type FileEventMessage,
-  type Group,
-  type ImageEventMessage,
-  type LocationEventMessage,
-  type MessageEvent,
-  type StickerEventMessage,
-  type TextEventMessage,
-  type TextMessage,
-  type VideoEventMessage
-} from '@line/bot-sdk'
+import { type Group, type MessageEvent, type TextMessage } from '@line/bot-sdk'
 import MessageDB from '../../DB/util/messageDB'
 import { sendMessageWithReplyApi } from '../../Line/util/sendMessage'
 
-async function handleMessageEvent (evt: MessageEvent) {
+async function handleMessageEvent (evt: MessageEvent): Promise<void> {
   const db =
     evt.source.type === 'user'
       ? new MessageDB(evt.source.userId)

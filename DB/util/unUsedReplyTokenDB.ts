@@ -72,7 +72,6 @@ class UnUsedReplyTokenDB {
         .then((kvs) => {
           kvs.some((kv) => {
             const k = Number(kv[0]) //  k = Timestamp = string
-            const v = kv[1]
 
             if (k + this.expireTimeMilliseconds >= nowTimeMilliseconds) {
               Promise.all(deletePromise).then((_) => {
