@@ -7,14 +7,14 @@ function handleDoPost (evt: GoogleAppsScript.Events.DoPost) {
   body.events.forEach(webhookEvt => {
     switch (webhookEvt.type) {
       case 'message':
-        handleMessageEvent(webhookEvt as MessageEvent)
-        .catch(e => {
-          throw Error(e)
-        })
+        handleMessageEvent(webhookEvt)
+          .catch(e => {
+            throw Error(e)
+          })
         break
 
       case 'join':
-        handleJoinEvent(webhookEvt as JoinEvent)
+        handleJoinEvent(webhookEvt)
         break
 
       case 'follow':

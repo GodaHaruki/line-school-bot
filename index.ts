@@ -8,7 +8,7 @@ function doPost (e: GoogleAppsScript.Events.DoPost): void {
   handleDoPost(e)
 }
 
-declare let global: any;
+declare let global: any
 
 global.doPost = doPost
 global.doGet = doGet

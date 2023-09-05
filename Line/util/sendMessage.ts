@@ -35,7 +35,7 @@ export async function sendMessageWithReplyApi (msgs: Messages, replyToken: strin
     },
     method: 'post',
     payload: JSON.stringify({
-      replyToken: replyToken,
+      replyToken,
       messages: msg
     })
   })

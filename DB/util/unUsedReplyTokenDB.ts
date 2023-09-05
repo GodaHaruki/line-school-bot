@@ -16,26 +16,29 @@ class UnUsedReplyTokenDB {
     this.expireTimeMilliseconds = expireTimeMilliseconds
   }
 
-  async findOne (f: (tokenInfo: ReplyTokenInfo, expireTimeMillisecond: number) => boolean): Promise<ReplyTokenInfo> {
+  async findOne (
+    f: (tokenInfo: ReplyTokenInfo, expireTimeMillisecond: number) => boolean
+  ): Promise<ReplyTokenInfo> {
     return await new Promise((resolve, reject) => {
       const deletePromise: Array<Promise<void>> = []
 
-      this.db.getAllKV()
-        .then(kvs => {
-          kvs.some((kv) => {
-            const k = kv[0]
-            const v = kv[1]
+      this.db.getAllKV().then((kvs) => {
+        kvs.some((kv) => {
+          const k = kv[0]
+          const v = kv[1]
 
-            deletePromise.push(this.db.delete(k))
+          deletePromise.push(this.db.delete(k))
 
-            if (f(v, this.expireTimeMilliseconds)) {
-              Promise.all(deletePromise) // not good for performance
-                .then(_ => { resolve(v) })
+          if (f(v, this.expireTimeMilliseconds)) {
+            Promise.all(deletePromise) // not good for performance
+              .then((_) => {
+                resolve(v)
+              })
 
-              return true
-            }
-          })
+            return true
+          }
         })
+      })
     })
   }
 
@@ -47,8 +50,11 @@ class UnUsedReplyTokenDB {
       //   .then(_ => resolve(kvs[0][1]))
       // )
 
-      this.findOne((v, t) => v.timestamp + t >= nowTimeMilliseconds)
-        .then(v => { resolve(v) })
+      this.findOne((v, t) => v.timestamp + t >= nowTimeMilliseconds).then(
+        (v) => {
+          resolve(v)
+        }
+      )
       // resolve(this.findOne((v, t) => v.timestamp + t >= nowTimeMilliseconds))
     })
   }
@@ -61,24 +67,29 @@ class UnUsedReplyTokenDB {
     await new Promise<void>((resolve, reject) => {
       const deletePromise: Array<Promise<void>> = []
 
-      this.db.getAllKV().then(kvs => {
-        kvs.some(kv => {
-          const k = Number(kv[0]) //  k = Timestamp = string
-          const v = kv[1]
+      this.db
+        .getAllKV()
+        .then((kvs) => {
+          kvs.some((kv) => {
+            const k = Number(kv[0]) //  k = Timestamp = string
+            const v = kv[1]
 
-          if (k + this.expireTimeMilliseconds >= nowTimeMilliseconds) {
-            Promise.all(deletePromise)
-              .then(_ => { resolve() })
-            return true
-          } else {
-            deletePromise.push(this.db.delete(kv[0]))
-          }
+            if (k + this.expireTimeMilliseconds >= nowTimeMilliseconds) {
+              Promise.all(deletePromise).then((_) => {
+                resolve()
+              })
+              return true
+            } else {
+              deletePromise.push(this.db.delete(kv[0]))
+            }
+          })
         })
-      })
-        .then(async _ => await Promise.all(deletePromise))
-        .then(_ => { resolve() })
+        .then(async (_) => await Promise.all(deletePromise))
+        .then((_) => {
+          resolve()
+        })
     })
   }
 }
 
-export default UnUsedReplyTokenDB;
+export default UnUsedReplyTokenDB

@@ -12,16 +12,16 @@ async function handleMessageEvent (evt: MessageEvent) {
 
   switch (evt.message.type) {
     case 'text':
-      const text = evt.message as TextEventMessage
+      const text = evt.message
       const msg: TextMessage = {
         type: 'text',
         text: text.text
       }
 
-      Logger.log("send message")
+      Logger.log('send message')
       // throw Error
 
-      sendMessageWithReplyApi([msg], evt.replyToken).then(v => {throw Error(v.getResponseCode().toString())})
+      sendMessageWithReplyApi([msg], evt.replyToken).then(v => { throw Error(v.getResponseCode().toString()) })
       break
 
     // case 'image':
