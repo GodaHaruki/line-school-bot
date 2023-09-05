@@ -1,30 +1,47 @@
-import { type Group, type MessageEvent, type TextMessage } from '@line/bot-sdk'
-import MessageDB from '../../DB/util/messageDB'
-import { sendMessageWithReplyApi } from '../../Line/util/sendMessage'
+import { type Group, type MessageEvent, type TextMessage } from "@line/bot-sdk";
+import MessageDB from "../../DB/util/messageDB";
+import { sendMessageWithReplyApi } from "../../Line/util/sendMessage";
+import KVDB from "../../DB/KVDB";
 
-async function handleMessageEvent (evt: MessageEvent): Promise<void> {
+interface Info {
+  type: string;
+}
+
+interface Homeworks extends Info {
+  type: "homework";
+  date: number;
+  content: string;
+}
+
+class AppDB extends KVDB<string, Homeworks> {
+  constructor(id: string) {
+    super(`App-${id}`);
+  }
+}
+
+async function handleMessageEvent(evt: MessageEvent): Promise<void> {
   const db =
-    evt.source.type === 'user'
+    evt.source.type === "user"
       ? new MessageDB(evt.source.userId)
-      : new MessageDB((evt.source as Group).groupId)
+      : new MessageDB((evt.source as Group).groupId);
 
-  db.push(evt.timestamp.toString(), evt)
+  db.push(evt.timestamp.toString(), evt);
 
   switch (evt.message.type) {
-    case 'text':
-      const text = evt.message
-      const msg: TextMessage = {
-        type: 'text',
-        text: text.text
-      }
+    case "text":
+      const text = evt.message;
+      switch (text.text) {
+        case "/homework":
+          const homeworks =
+            (evt.source.type) === "user"
+              ? await new AppDB(evt.source.userId!).getAll()
+              : await new AppDB((evt.source as Group).groupId).getAll();
 
-      Logger.log('send message')
-      // throw Error
-
-      sendMessageWithReplyApi([msg], evt.replyToken).then((v) => {
-        throw Error(v.getResponseCode().toString())
-      })
-      break
+          sendMessageWithReplyApi({
+            type: "text",
+            text: homeworks.map(h => h.content).join("/n")
+          }, evt.replyToken);
+      break;
 
     // case 'image':
     //   const image = evt.message as ImageEventMessage
@@ -52,4 +69,4 @@ async function handleMessageEvent (evt: MessageEvent): Promise<void> {
   }
 }
 
-export default handleMessageEvent
+export default handleMessageEvent;
