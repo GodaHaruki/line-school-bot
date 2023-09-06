@@ -1,11 +1,11 @@
-import { type Message } from '@line/bot-sdk'
-import getScriptEnv from '../../env'
+import { type Message } from "@line/bot-sdk";
+import getScriptEnv from "../env";
 
 type Messages =
   | Message
   | [Message]
   | [Message, Message]
-  | [Message, Message, Message]
+  | [Message, Message, Message];
 
 // curl -v -X POST https://api.line.me/v2/bot/message/reply \
 // -H 'Content-Type: application/json' \
@@ -24,25 +24,25 @@ type Messages =
 //     ]
 // }'
 
-export async function sendMessageWithReplyApi (
+export async function sendMessageWithReplyApi(
   msgs: Messages,
   replyToken: string
 ): Promise<GoogleAppsScript.URL_Fetch.HTTPResponse> {
-  const url = 'https://api.line.me/v2/bot/message/reply'
+  const url = "https://api.line.me/v2/bot/message/reply";
 
-  const msg = Array.isArray(msgs) ? msgs : [msgs]
+  const msg = Array.isArray(msgs) ? msgs : [msgs];
 
   return UrlFetchApp.fetch(url, {
-    contentType: 'application/json',
+    contentType: "application/json",
     headers: {
-      Authorization: `Bearer ${getScriptEnv().LINE_CHANNEL_ACCESS_TOKEN}`
+      Authorization: `Bearer ${getScriptEnv().LINE_CHANNEL_ACCESS_TOKEN}`,
     },
-    method: 'post',
+    method: "post",
     payload: JSON.stringify({
       replyToken,
-      messages: msg
-    })
-  })
+      messages: msg,
+    }),
+  });
 }
 
 // curl -v -X POST https://api.line.me/v2/bot/message/push \
@@ -63,23 +63,23 @@ export async function sendMessageWithReplyApi (
 //     ]
 // }'
 
-export async function sendMessageWithPushApi (
+export async function sendMessageWithPushApi(
   msgs: Messages,
   to: string
 ): Promise<GoogleAppsScript.URL_Fetch.HTTPResponse> {
-  const url = 'https://api.line.me/v2/bot/message/push'
+  const url = "https://api.line.me/v2/bot/message/push";
 
-  const msg = Array.isArray(msgs) ? msgs : [msgs] // if msgs == Message, convert to [Message]
+  const msg = Array.isArray(msgs) ? msgs : [msgs]; // if msgs == Message, convert to [Message]
 
   return UrlFetchApp.fetch(url, {
-    contentType: 'application/json',
+    contentType: "application/json",
     headers: {
-      Authorization: `Bearer ${getScriptEnv().LINE_CHANNEL_ACCESS_TOKEN}`
+      Authorization: `Bearer ${getScriptEnv().LINE_CHANNEL_ACCESS_TOKEN}`,
     },
-    method: 'post',
+    method: "post",
     payload: JSON.stringify({
       to,
-      messages: msg
-    })
-  })
+      messages: msg,
+    }),
+  });
 }
